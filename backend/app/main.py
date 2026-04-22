@@ -38,17 +38,37 @@ def create_app() -> FastAPI:
         ),
         lifespan=lifespan,
     )
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=SETTINGS.allowed_origins,
-        allow_credentials=False,
-        allow_methods=["GET", "POST"],
-        allow_headers=["*"],
-    )
+    # If ALLOWED_ORIGINS contains "*", open CORS fully (safe because we run
+    # with allow_credentials=False). Otherwise use the explicit list and also
+    # match Railway + Vercel preview domains via regex so you don't have to
+    # chase URLs every time a preview is redeployed.
+    if SETTINGS.allow_all_origins:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=False,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+    else:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=SETTINGS.allowed_origins,
+            allow_origin_regex=r"https?://([a-z0-9-]+\.)*(railway\.app|vercel\.app|up\.railway\.app)$",
+            allow_credentials=False,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
 
     @app.get("/health", tags=["meta"])
     def health() -> dict[str, object]:
-        return {"ok": True}
+        return {
+            "ok": True,
+            "cors": {
+                "allow_all": SETTINGS.allow_all_origins,
+                "origins": SETTINGS.allowed_origins,
+            },
+        }
 
     app.include_router(meta.router)
     app.include_router(prices.router)
