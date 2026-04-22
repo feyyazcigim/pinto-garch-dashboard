@@ -125,8 +125,14 @@ export interface CompareResult {
   rows: CompareRow[];
 }
 
+// In dev, `/api/*` is proxied to the FastAPI backend by vite.config.ts.
+// In prod, set VITE_API_URL to the absolute backend origin (e.g. the Railway
+// URL) and we'll prepend it to every request here.
+const API_BASE = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(path, {
+  const url = API_BASE ? `${API_BASE}${path}` : path;
+  const res = await fetch(url, {
     ...init,
     headers: { "Content-Type": "application/json", ...(init?.headers || {}) },
   });
