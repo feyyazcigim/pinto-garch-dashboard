@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "Pinto";
+    font-weight: 500;
+    font-display: swap;
+    src: url("@/assets/fonts/Pinto-Regular.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Pinto";
+    font-weight: 400;
+    font-display: swap;
+    src: url("@/assets/fonts/Pinto-Book.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Pinto";
+    font-weight: 340;
+    font-display: swap;
+    src: url("@/assets/fonts/Pinto-Book.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Pinto";
+    font-weight: 300;
+    font-display: swap;
+    src: url("@/assets/fonts/Pinto-Light.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Pinto";
+    font-weight: 600;
+    font-display: swap;
+    src: url("@/assets/fonts/Pinto-Medium.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Roboto";
+    font-weight: 300;
+    font-display: swap;
+    src: url("@/assets/fonts/Roboto-Light.ttf") format("truetype");
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0, 0%, 32%;
+    --muted: 0, 0%, 73%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+    --border: 0, 0%, 85%;
+    --input: 208, 42%, 94%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --accent: 151, 100%, 39%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+    --ring: 150, 48%, 27%;
+    --error-ring: 0, 100%, 50%;
+    --radius: 0.75rem;
+  }
+}
+
+@layer components {
+  .bg-gradient-light {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(233, 231, 224, 0.1) 0%,
+        rgba(254, 225, 140, 0.1) 52.5%,
+        rgba(241, 248, 140, 0.1) 100%
+      ),
+      linear-gradient(0deg, #ffffff, #ffffff);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-gradient-light text-pinto-primary font-pinto;
+  }
+}
+
+* {
+  min-width: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+html,
+body {
+  height: 100%;
+  font-size: 100%;
+}
+
+/* Match interface's responsive sizing */
+@media screen and (min-width: 768px) and (max-width: 1600px) {
+  html,
+  body {
+    font-size: 75%;
+  }
+}

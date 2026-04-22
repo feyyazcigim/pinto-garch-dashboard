@@ -1,0 +1,19 @@
+import * as React from "react";
+import { cn } from "@/lib/cn";
+
+export const Separator = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & { orientation?: "horizontal" | "vertical" }
+>(({ className, orientation = "horizontal", ...props }, ref) => (
+  <div
+    ref={ref}
+    role="separator"
+    className={cn(
+      "bg-pinto-gray-2",
+      orientation === "horizontal" ? "h-[1px] w-full" : "h-full w-[1px]",
+      className,
+    )}
+    {...props}
+  />
+));
+Separator.displayName = "Separator";
