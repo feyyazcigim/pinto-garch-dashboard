@@ -5,15 +5,23 @@ services:
     ports:
       - "8000:8000"
     environment:
+      PORT: "8000"
       CACHE_TTL_SECONDS: "600"
-      ALLOWED_ORIGINS: "http://localhost:8080,http://localhost:5173"
+      ALLOWED_ORIGINS: "http://localhost:8080"
     restart: unless-stopped
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        # Local-dev backend URL baked into the bundle. In production we set
+        # this in Railway's service variables to the public backend URL.
+        VITE_API_URL: "http://localhost:8000"
     container_name: pinto-garch-frontend
     ports:
       - "8080:8080"
+    environment:
+      PORT: "8080"
     depends_on:
       - backend
     restart: unless-stopped

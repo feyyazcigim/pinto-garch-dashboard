@@ -89,6 +89,46 @@ docker compose up --build
 Then open <http://localhost:8080>. No volumes, no bind mounts — the backend just needs outbound
 HTTPS to `coins.llama.fi` and `graph.pinto.money`.
 
+## Deploying — Railway (both services)
+
+Both the backend and the frontend run on Railway as two separate services in one project.
+
+1. **Create project** — `railway.app` → *New Project* → *Deploy from GitHub repo* → select
+   `pinto-garch-dashboard`.
+
+2. **Backend service** (Railway will create one by default).
+   - *Settings → General → Root Directory*: `/backend`
+   - *Settings → Networking*: click **Generate Domain** → copy the resulting
+     `https://<name>.up.railway.app` URL.
+   - *Variables*:
+     ```
+     CACHE_TTL_SECONDS=600
+     ALLOWED_ORIGINS=https://<frontend-url>.up.railway.app
+     ```
+     (You can set `ALLOWED_ORIGINS=*` while bootstrapping — the backend is
+     `allow_credentials=False` so the wildcard is safe — then tighten it later.)
+   - `backend/railway.json` pins the Dockerfile builder, healthcheck at `/health`, and honors
+     `$PORT`.
+
+3. **Frontend service** — *+ New* → *GitHub Repo* → same repo.
+   - *Settings → General → Root Directory*: `/frontend`
+   - *Settings → Networking*: **Generate Domain**.
+   - *Variables*:
+     ```
+     VITE_API_URL=https://<backend-url>.up.railway.app
+     ```
+     This gets baked into the Vite bundle at build time (see
+     `frontend/Dockerfile`'s `ARG VITE_API_URL`).
+   - `frontend/railway.json` pins the Dockerfile builder. `nginx` listens on `$PORT` via the
+     template in `/etc/nginx/templates/default.conf.template`.
+
+4. **Cross-wire** — after both services have domains, paste the frontend URL into the backend's
+   `ALLOWED_ORIGINS` var, redeploy backend. Now the frontend can actually call the API.
+
+First backend deploy takes ~3-5 min (installing `arch`, `pandas`, `numpy`, `scipy` wheels).
+First request to `/api/assets` takes ~25 s (probes all 10 assets in parallel); every subsequent
+request hits the in-memory TTL cache and returns in tens of milliseconds.
+
 ## Endpoints
 
 | Method | Path | Purpose |

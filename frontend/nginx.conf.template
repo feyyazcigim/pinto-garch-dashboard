@@ -1,0 +1,26 @@
+server {
+  listen ${PORT};
+  server_name _;
+  root /usr/share/nginx/html;
+  index index.html;
+
+  # SPA: fall through to index.html for non-asset paths.
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+
+  # Aggressive caching for hashed assets; served by Vite with content hashes.
+  location ~* \.(js|css|woff2|ttf|svg|png|jpg|webp|ico)$ {
+    expires 7d;
+    add_header Cache-Control "public, max-age=604800, immutable";
+  }
+
+  # index.html itself must never be cached — hash-less, must revalidate.
+  location = /index.html {
+    add_header Cache-Control "no-cache, no-store, must-revalidate";
+  }
+
+  gzip on;
+  gzip_types text/css application/javascript application/json image/svg+xml;
+  gzip_min_length 1024;
+}
