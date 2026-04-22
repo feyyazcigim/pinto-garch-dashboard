@@ -18,7 +18,7 @@ interface Props {
 
 export function DateRangePicker({ value, onChange, min, max }: Props) {
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-1.5 w-full sm:w-auto">
       <Label>Date range</Label>
       <div className="flex items-center gap-2">
         <DateField
@@ -76,7 +76,7 @@ function DateField({
       tabIndex={-1}
       onClick={openPicker}
       className={cn(
-        "group relative flex h-10 w-[150px] cursor-pointer items-center rounded-md border border-pinto-gray-2 bg-white pl-3 pr-9 shadow-sm transition-colors",
+        "group relative flex h-10 w-full min-w-[130px] cursor-pointer items-center rounded-md border border-pinto-gray-2 bg-white pl-3 pr-9 shadow-sm transition-colors sm:w-[150px]",
         "hover:bg-pinto-gray-1 focus-within:ring-1 focus-within:ring-ring",
       )}
     >

@@ -5,20 +5,18 @@ import type { Backtest, FitResult } from "@/lib/api";
 import { fmtNumber, fmtPValue } from "@/lib/format";
 
 function TestRow({ name, b, desc }: { name: string; b: Backtest; desc: string }) {
-  const kupPass = b.kupiec_pass;
-  const chrPass = b.christoffersen_pass;
   return (
-    <div className="grid grid-cols-[140px_1fr_1fr] gap-3 items-center py-2 border-b border-pinto-gray-2/50 last:border-0">
+    <div className="flex flex-col gap-3 py-3 border-b border-pinto-gray-2/50 last:border-0 md:grid md:grid-cols-[140px_1fr_1fr] md:items-center md:gap-4 md:py-2">
       <Tooltip>
         <TooltipTrigger asChild>
           <span className="pinto-sm text-pinto-gray-5 cursor-help">{name}</span>
         </TooltipTrigger>
         <TooltipContent className="max-w-xs">{desc}</TooltipContent>
       </Tooltip>
-      <TestCell label="Kupiec POF" pass={kupPass} stat={b.kupiec_stat} p={b.kupiec_p} />
+      <TestCell label="Kupiec POF" pass={b.kupiec_pass} stat={b.kupiec_stat} p={b.kupiec_p} />
       <TestCell
         label="Christoffersen ind."
-        pass={chrPass}
+        pass={b.christoffersen_pass}
         stat={b.christoffersen_stat}
         p={b.christoffersen_p}
       />
@@ -38,12 +36,14 @@ function TestCell({
   p: number;
 }) {
   return (
-    <div className="flex items-center gap-3">
-      <Badge variant={pass ? "success" : "error"}>{pass ? "PASS" : "FAIL"}</Badge>
-      <div className="flex flex-col leading-tight">
-        <span className="pinto-xs text-pinto-gray-4">{label}</span>
-        <span className="pinto-xs font-menlo text-pinto-gray-5">
-          LR = {fmtNumber(stat, 2)} · p = {fmtPValue(p)}
+    <div className="flex items-center gap-3 min-w-0">
+      <Badge variant={pass ? "success" : "error"} className="flex-shrink-0">
+        {pass ? "PASS" : "FAIL"}
+      </Badge>
+      <div className="flex flex-col leading-tight min-w-0">
+        <span className="pinto-xs text-pinto-gray-4 truncate">{label}</span>
+        <span className="pinto-xs font-menlo text-pinto-gray-5 whitespace-nowrap">
+          LR={fmtNumber(stat, 2)} · p={fmtPValue(p)}
         </span>
       </div>
     </div>
@@ -76,11 +76,10 @@ export function VaRBacktestPanel({ fit }: { fit: FitResult }) {
             desc="Expected ~1% violations; the 99% VaR is the tail risk most relevant to extreme-loss scenarios."
           />
         )}
-        <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 pinto-xs text-pinto-gray-4">
+        <div className="mt-3 flex flex-col gap-1 pinto-xs text-pinto-gray-4 sm:flex-row sm:flex-wrap sm:gap-x-6">
           {b95 && (
             <span>
-              95% observed violations: <span className="font-menlo">{b95.violations}</span> /{" "}
-              {b95.n} (
+              95% violations: <span className="font-menlo">{b95.violations}</span> / {b95.n} (
               <span className="font-menlo">
                 {((b95.violations / Math.max(b95.n, 1)) * 100).toFixed(1)}%
               </span>
@@ -89,8 +88,7 @@ export function VaRBacktestPanel({ fit }: { fit: FitResult }) {
           )}
           {b99 && (
             <span>
-              99% observed violations: <span className="font-menlo">{b99.violations}</span> /{" "}
-              {b99.n} (
+              99% violations: <span className="font-menlo">{b99.violations}</span> / {b99.n} (
               <span className="font-menlo">
                 {((b99.violations / Math.max(b99.n, 1)) * 100).toFixed(1)}%
               </span>

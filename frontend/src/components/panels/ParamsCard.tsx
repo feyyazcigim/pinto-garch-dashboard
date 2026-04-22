@@ -27,20 +27,18 @@ export function ParamsCard({ fit }: { fit: FitResult }) {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="flex flex-col gap-4">
           <div>
             <CardTitle>Estimated parameters</CardTitle>
             <CardDescription>
               {fit.spec} · {fit.dist} innovations · n = {fit.n}
             </CardDescription>
           </div>
-          <div className="flex flex-col items-end gap-1">
-            <div className="flex gap-4">
-              <Metric label="Log-lik" value={fmtNumber(fit.loglik, 2)} />
-              <Metric label="AIC" value={fmtNumber(fit.aic, 2)} />
-              <Metric label="BIC" value={fmtNumber(fit.bic, 2)} />
-              <Metric label="Persist." value={fmtNumber(fit.persistence, 4)} />
-            </div>
+          <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4">
+            <Metric label="Log-lik" value={fmtNumber(fit.loglik, 2)} />
+            <Metric label="AIC" value={fmtNumber(fit.aic, 2)} />
+            <Metric label="BIC" value={fmtNumber(fit.bic, 2)} />
+            <Metric label="Persist." value={fmtNumber(fit.persistence, 4)} />
           </div>
         </div>
       </CardHeader>
@@ -48,10 +46,10 @@ export function ParamsCard({ fit }: { fit: FitResult }) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[110px]">Param</TableHead>
+              <TableHead className="w-[70px]">Param</TableHead>
               <TableHead>Estimate</TableHead>
-              <TableHead>Std. err.</TableHead>
-              <TableHead>t-stat</TableHead>
+              <TableHead className="hidden sm:table-cell">Std. err.</TableHead>
+              <TableHead className="hidden md:table-cell">t-stat</TableHead>
               <TableHead>p-value</TableHead>
               <TableHead className="text-right pr-4">Sig.</TableHead>
             </TableRow>
@@ -69,11 +67,19 @@ export function ParamsCard({ fit }: { fit: FitResult }) {
                       <TooltipContent>{meta.desc}</TooltipContent>
                     </Tooltip>
                   </TableCell>
-                  <TableCell className="font-menlo">{fmtNumber(p.value, 6)}</TableCell>
-                  <TableCell className="font-menlo text-pinto-gray-4">
+                  <TableCell className="font-menlo">
+                    <span>{fmtNumber(p.value, 6)}</span>
+                    {/* On mobile, stack std-err under estimate instead of hiding it. */}
+                    <span className="block text-[0.7rem] text-pinto-gray-4 sm:hidden">
+                      ± {fmtNumber(p.std_err, 6)}
+                    </span>
+                  </TableCell>
+                  <TableCell className="font-menlo text-pinto-gray-4 hidden sm:table-cell">
                     ± {fmtNumber(p.std_err, 6)}
                   </TableCell>
-                  <TableCell className="font-menlo">{fmtNumber(p.t_stat, 3)}</TableCell>
+                  <TableCell className="font-menlo hidden md:table-cell">
+                    {fmtNumber(p.t_stat, 3)}
+                  </TableCell>
                   <TableCell className="font-menlo">{fmtPValue(p.p_value)}</TableCell>
                   <TableCell className="text-right pr-4">
                     <SignificanceBadge p={p.p_value} />
@@ -90,7 +96,7 @@ export function ParamsCard({ fit }: { fit: FitResult }) {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-col items-end">
+    <div className="flex flex-col items-start sm:items-end">
       <span className="pinto-xs text-pinto-gray-4">{label}</span>
       <span className="pinto-sm-bold font-menlo text-pinto-gray-5">{value}</span>
     </div>

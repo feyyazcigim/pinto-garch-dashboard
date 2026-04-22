@@ -65,7 +65,7 @@ export function Dashboard() {
     <div className="min-h-screen w-full">
       <Header />
 
-      <main className="mx-auto w-full max-w-[1440px] px-6 pb-16 pt-4">
+      <main className="mx-auto w-full max-w-[1440px] px-4 pb-16 pt-4 sm:px-6">
         <ControlsBar
           assets={assets}
           assetsLoading={meta.isLoading}
@@ -140,11 +140,11 @@ export function Dashboard() {
 function Header() {
   return (
     <header className="w-full border-b border-pinto-gray-2/60 bg-white/60 backdrop-blur-sm">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-wrap items-center justify-between gap-4 px-6 py-5">
-        <div className="flex flex-col">
-          <span className="pinto-h3 text-pinto-gray-5">Pinto GARCH Dashboard</span>
-          <span className="pinto-sm-light text-pinto-gray-4">
-            Interactive volatility modeling · live from DeFi Llama + Pinto subgraph
+      <div className="mx-auto flex w-full max-w-[1440px] flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 sm:py-5">
+        <div className="flex flex-col gap-0.5">
+          <span className="pinto-h4 text-pinto-gray-5 sm:pinto-h3">Pinto GARCH Dashboard</span>
+          <span className="pinto-xs text-pinto-gray-4 sm:pinto-sm-light">
+            Interactive volatility modeling
           </span>
         </div>
       </div>
@@ -167,8 +167,8 @@ function ControlsBar(props: {
   maxDate?: string;
 }) {
   return (
-    <Card className="sticky top-4 z-10 flex-wrap">
-      <CardContent className="flex flex-wrap items-end gap-4 p-4">
+    <Card className="sm:sticky sm:top-4 sm:z-10">
+      <CardContent className="grid grid-cols-1 gap-3 p-3 sm:grid-cols-2 sm:gap-4 sm:p-4 lg:flex lg:flex-wrap lg:items-end">
         <AssetSelect
           assets={props.assets}
           value={props.asset}

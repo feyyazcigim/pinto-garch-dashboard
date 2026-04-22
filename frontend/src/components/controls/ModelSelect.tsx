@@ -16,7 +16,7 @@ const DIST_LABELS: Record<Dist, string> = {
 
 export function ModelSelect({ value, onChange }: { value: Spec; onChange: (v: Spec) => void }) {
   return (
-    <div className="flex flex-col gap-1.5 min-w-[180px]">
+    <div className="flex flex-col gap-1.5 w-full sm:w-[200px]">
       <Label>Model</Label>
       <Select value={value} onValueChange={(v) => onChange(v as Spec)}>
         <SelectTrigger>
@@ -36,7 +36,7 @@ export function ModelSelect({ value, onChange }: { value: Spec; onChange: (v: Sp
 
 export function DistSelect({ value, onChange }: { value: Dist; onChange: (v: Dist) => void }) {
   return (
-    <div className="flex flex-col gap-1.5 min-w-[180px]">
+    <div className="flex flex-col gap-1.5 w-full sm:w-[200px]">
       <Label>Distribution</Label>
       <Select value={value} onValueChange={(v) => onChange(v as Dist)}>
         <SelectTrigger>

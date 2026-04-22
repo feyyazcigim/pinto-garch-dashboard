@@ -13,7 +13,7 @@ interface Props {
 
 export function AssetSelect({ assets, value, onChange, label = "Asset", loading = false }: Props) {
   return (
-    <div className="flex flex-col gap-1.5 min-w-[180px]">
+    <div className="flex flex-col gap-1.5 w-full sm:w-[200px]">
       <Label>{label}</Label>
       {loading ? (
         <div className="flex h-10 w-full items-center justify-between rounded-md border border-pinto-gray-2 bg-pinto-gray-1 px-3 py-2">
