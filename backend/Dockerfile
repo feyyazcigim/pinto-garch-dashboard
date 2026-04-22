@@ -13,8 +13,10 @@ COPY app/ ./app/
 
 RUN pip install --upgrade pip && pip install .
 
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+ENV PORT=8000
 EXPOSE 8000
 
-# Shell form so ${PORT} is expanded at runtime — Railway injects $PORT per
-# service; other hosts fall back to 8000.
-CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
+CMD ["/start.sh"]
